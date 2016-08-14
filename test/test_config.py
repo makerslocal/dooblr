@@ -7,7 +7,7 @@ class ParseTestCase(unittest.TestCase):
     def test_missing_field_value_raises_error(self):
         config = Config()
         config_text = "\n".join((
-                       "[measurement]",
+                       u"[measurement]",
                        "topics: ml256/topic/device",
                        "        ml256/topic/otherdevice",
                        "tags: supertag, awesometag"))
@@ -17,7 +17,7 @@ class ParseTestCase(unittest.TestCase):
     def test_missing_topic_value_raises_error(self):
         config = Config()
         config_text = "\n".join((
-                       "[measurement]",
+                       u"[measurement]",
                        "fields: coolfield, neatfield",
                        "tags: supertag, awesometag"))
         with self.assertRaises(DooblrConfigError):
@@ -26,7 +26,7 @@ class ParseTestCase(unittest.TestCase):
     def test_missing_tag_value_does_not_raise_error(self):
         config = Config()
         config_text = "\n".join((
-                       "[measurement]",
+                       u"[measurement]",
                        "topics: ml256/topic/device",
                        "        ml256/topic/otherdevice",
                        "fields: coolfield,neatfield"))
@@ -38,7 +38,7 @@ class ParseTestCase(unittest.TestCase):
     def test_valid_config_does_not_raise_error(self):
         config = Config()
         config_text = "\n".join((
-                       "[measurement]",
+                       u"[measurement]",
                        "topics: ml256/topic/device",
                        "        ml256/topic/otherdevice",
                        "fields: coolfield, neatfield",
@@ -51,7 +51,7 @@ class ParseTestCase(unittest.TestCase):
     def test_single_topic_is_parsed(self):
         config = Config()
         config_text = "\n".join((
-                       "[measurement]",
+                       u"[measurement]",
                        "topics: ml256/topic/device",
                        "fields: coolfield, neatfield",
                        "tags: supertag, awesometag"))
@@ -62,7 +62,7 @@ class ParseTestCase(unittest.TestCase):
     def test_multiple_topics_are_parsed(self):
         config = Config()
         config_text = "\n".join((
-                       "[measurement]",
+                       u"[measurement]",
                        "topics: ml256/topic/device",
                        "        ml256/topic/otherdevice",
                        "fields: coolfield, neatfield",
@@ -74,7 +74,7 @@ class ParseTestCase(unittest.TestCase):
     def test_single_field_is_parsed(self):
         config = Config()
         config_text = "\n".join((
-            "[measurement]",
+            u"[measurement]",
             "topics: ml256/topic/device",
             "        ml256/topic/otherdevice",
             "fields: coolfield",
@@ -86,7 +86,7 @@ class ParseTestCase(unittest.TestCase):
     def test_multiple_fields_are_parsed(self):
         config = Config()
         config_text = "\n".join((
-            "[measurement]",
+            u"[measurement]",
             "topics: ml256/topic/device",
             "        ml256/topic/otherdevice",
             "fields: coolfield, neatfield",
@@ -98,7 +98,7 @@ class ParseTestCase(unittest.TestCase):
     def test_single_tag_is_parsed(self):
         config = Config()
         config_text = "\n".join((
-                       "[measurement]",
+                       u"[measurement]",
                        "topics: ml256/topic/device",
                        "        ml256/topic/otherdevice",
                        "fields: coolfield, neatfield",
@@ -110,7 +110,7 @@ class ParseTestCase(unittest.TestCase):
     def test_multiple_tags_are_parsed(self):
         config = Config()
         config_text = "\n".join((
-                       "[measurement]",
+                       u"[measurement]",
                        "topics: ml256/topic/device",
                        "        ml256/topic/otherdevice",
                        "fields: coolfield, neatfield",
