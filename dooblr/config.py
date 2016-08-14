@@ -1,7 +1,8 @@
-from ConfigParser import SafeConfigParser
-import StringIO
+from configparser import SafeConfigParser
+from io import StringIO
 import logging
 import re
+
 
 class DooblrConfigError(Exception):
     def __init__(self, *args,**kwargs):
@@ -19,7 +20,8 @@ class Config(object):
             self._parse(config_file)
 
     def _parse(self, config_text):
-        self._config.readfp(StringIO.StringIO(config_text))
+        fileish_string = StringIO(config_text)
+        self._config.read_file(fileish_string)
 
         for measurement in self._config.sections():
             self.measurements[measurement] = {}
