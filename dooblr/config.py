@@ -17,7 +17,7 @@ class Config(object):
 
     def load(self, filepath):
         with open(filepath, 'r') as config_file:
-            self._parse(config_file)
+            self._parse(unicode(config_file.read()))
 
     def _parse(self, config_text):
         fileish_string = StringIO(config_text)
