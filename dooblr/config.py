@@ -1,4 +1,4 @@
-from configparser import SafeConfigParser
+from configparser import ConfigParser
 from io import StringIO
 import logging
 import re
@@ -12,12 +12,12 @@ class DooblrConfigError(Exception):
 class Config(object):
     def __init__(self):
         self._logger = logging.getLogger(__name__)
-        self._config = SafeConfigParser()
+        self._config = ConfigParser()
         self.measurements = {}
 
     def load(self, filepath):
         with open(filepath, 'r') as config_file:
-            self._parse(config_file)
+            self._parse(unicode(config_file.read()))
 
     def _parse(self, config_text):
         fileish_string = StringIO(config_text)
