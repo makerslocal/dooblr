@@ -1,11 +1,32 @@
 import unittest
-from dooblr.config import Config, DooblrConfigError
+from dooblr.config import MeasurementConfig, MainConfig, DooblrConfigError
 
 
-class ParseTestCase(unittest.TestCase):
+class MainConfigParseTestCase(unittest.TestCase):
+
+    def test_empty_section_does_not_raise_error(self):
+        config = MainConfig()
+        config_text = u""
+        try:
+            config._parse(config_text)
+        except Exception as e:
+            self.fail("Missing config option raised an exception! ({e})".format(e=e))
+
+    def test_partial_section_does_not_raise_error(self):
+        config = MainConfig()
+        config_text = "\n".join((
+                      u"[mqtt]",
+                      "host: blah"))
+        try:
+            config._parse(config_text)
+        except Exception as e:
+            self.fail("Missing config option raised an exception! ({e})".format(e=e))
+
+
+class MeasurementConfigParseTestCase(unittest.TestCase):
 
     def test_missing_field_value_raises_error(self):
-        config = Config()
+        config = MeasurementConfig()
         config_text = "\n".join((
                        u"[measurement]",
                        "topics: ml256/topic/device",
@@ -15,7 +36,7 @@ class ParseTestCase(unittest.TestCase):
             config._parse(config_text)
 
     def test_missing_topic_value_raises_error(self):
-        config = Config()
+        config = MeasurementConfig()
         config_text = "\n".join((
                        u"[measurement]",
                        "fields: coolfield, neatfield",
@@ -24,7 +45,7 @@ class ParseTestCase(unittest.TestCase):
             config._parse(config_text)
 
     def test_missing_tag_value_does_not_raise_error(self):
-        config = Config()
+        config = MeasurementConfig()
         config_text = "\n".join((
                        u"[measurement]",
                        "topics: ml256/topic/device",
@@ -36,7 +57,7 @@ class ParseTestCase(unittest.TestCase):
             self.fail("Missing tag config raised an exception! ({e})".format(e=e))
 
     def test_valid_config_does_not_raise_error(self):
-        config = Config()
+        config = MeasurementConfig()
         config_text = "\n".join((
                        u"[measurement]",
                        "topics: ml256/topic/device",
@@ -49,7 +70,7 @@ class ParseTestCase(unittest.TestCase):
             self.fail("Valid config raised an exception! ({e})".format(e=e))
 
     def test_single_topic_is_parsed(self):
-        config = Config()
+        config = MeasurementConfig()
         config_text = "\n".join((
                        u"[measurement]",
                        "topics: ml256/topic/device",
@@ -60,7 +81,7 @@ class ParseTestCase(unittest.TestCase):
         self.assertEquals(config.measurements["measurement"]["topics"], ["ml256/topic/device"])
 
     def test_multiple_topics_are_parsed(self):
-        config = Config()
+        config = MeasurementConfig()
         config_text = "\n".join((
                        u"[measurement]",
                        "topics: ml256/topic/device",
@@ -72,7 +93,7 @@ class ParseTestCase(unittest.TestCase):
         self.assertEquals(config.measurements["measurement"]["topics"], ["ml256/topic/device", "ml256/topic/otherdevice"])
 
     def test_single_field_is_parsed(self):
-        config = Config()
+        config = MeasurementConfig()
         config_text = "\n".join((
             u"[measurement]",
             "topics: ml256/topic/device",
@@ -84,7 +105,7 @@ class ParseTestCase(unittest.TestCase):
         self.assertEquals(config.measurements["measurement"]["fields"], ["coolfield"])
 
     def test_multiple_fields_are_parsed(self):
-        config = Config()
+        config = MeasurementConfig()
         config_text = "\n".join((
             u"[measurement]",
             "topics: ml256/topic/device",
@@ -96,7 +117,7 @@ class ParseTestCase(unittest.TestCase):
         self.assertEquals(config.measurements["measurement"]["fields"], ["coolfield", "neatfield"])
 
     def test_single_tag_is_parsed(self):
-        config = Config()
+        config = MeasurementConfig()
         config_text = "\n".join((
                        u"[measurement]",
                        "topics: ml256/topic/device",
@@ -108,7 +129,7 @@ class ParseTestCase(unittest.TestCase):
         self.assertEquals(config.measurements["measurement"]["tags"], ["supertag"])
 
     def test_multiple_tags_are_parsed(self):
-        config = Config()
+        config = MeasurementConfig()
         config_text = "\n".join((
                        u"[measurement]",
                        "topics: ml256/topic/device",
@@ -122,16 +143,16 @@ class ParseTestCase(unittest.TestCase):
 
 class ParseOptionTestCase(unittest.TestCase):
     def test_multiple_options_newlines_are_parsed(self):
-        config = Config()
+        config = MeasurementConfig()
         option_text = "foo\n        bar"
         self.assertEquals(config._parse_option(option_text), ["foo", "bar"])
 
     def test_multiple_options_commas_are_parsed(self):
-        config = Config()
+        config = MeasurementConfig()
         option_text = "foo, bar"
         self.assertEquals(config._parse_option(option_text), ["foo", "bar"])
 
     def test_multiple_options_commas_and_newlines_are_parsed(self):
-        config = Config()
+        config = MeasurementConfig()
         option_text = "foo\n        bar, bah"
         self.assertEquals(config._parse_option(option_text), ["foo", "bar", "bah"])
