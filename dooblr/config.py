@@ -84,4 +84,3 @@ class MeasurementConfig(object):
     @staticmethod
     def _parse_option(option_string):
         return re.split(r'[\s,]+', option_string)
-

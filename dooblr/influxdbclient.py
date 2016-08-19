@@ -2,11 +2,11 @@ import logging
 import influxdb
 from influxdb.exceptions import InfluxDBClientError
 from schema import Schema, And, Or, Optional, SchemaError
-import datetime
+import six
 
 
 class DooblrInfluxDBError(Exception):
-    def __init__(self, *args,**kwargs):
+    def __init__(self, *args, **kwargs):
         Exception.__init__(self, *args, **kwargs)
 
 
@@ -31,7 +31,7 @@ class InfluxDBClient(object):
     @staticmethod
     def _validate_data(data_dict):
         schema = Schema({
-            "measurement": And(Or(str, unicode), len),
+            "measurement": And(Or(*six.string_types), len),
             "fields": And(dict, len),
             Optional("tags"): And(dict)
         })
