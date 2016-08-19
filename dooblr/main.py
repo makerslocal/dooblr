@@ -2,6 +2,8 @@ import logging
 import config
 import mqttclient
 import os
+import influxdbclient
+
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -22,8 +24,17 @@ def main():
         logger.error("Can't open config file {file}: {reason}".format(file=default_cfg_file, reason=e))
         raise
 
+    influx = influxdbclient.InfluxDBClient(
+        host=main_cfg.influx_host,
+        port=main_cfg.influx_port,
+        username=main_cfg.influx_username,
+        password=main_cfg.influx_password,
+        database=main_cfg.influx_database
+    )
+
     def callback(message):
         logger.info(message)
+        influx.write(message)
 
     client = mqttclient.MqttClient(callback)
     logger.info("Connecting to MQTT broker: {host}:{port}".format(host=main_cfg.mqtt_host, port=main_cfg.mqtt_port))
