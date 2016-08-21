@@ -4,6 +4,6 @@ COPY . /dooblr
 
 WORKDIR /dooblr
 
-RUN pip install -r requirements.txt
+RUN pip install ./ 
 
-ENTRYPOINT ["python", "/dooblr/dooblr/main.py"]
+ENTRYPOINT ["dooblr"]
