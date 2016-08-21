@@ -35,7 +35,7 @@ class MqttClient(object):
         self._logger.debug("Received message on topic {t}: {m}".format(t=message.topic, m=message.payload))
         for measurement in self._measurements:
             for topic in self._measurements[measurement]["topics"]:
-                if mqtt.topic_matches_sub(message.topic, topic):
+                if mqtt.topic_matches_sub(topic, message.topic):
                     try:
                         parsed_message = self._parse_message(measurement, message.payload)
                     except DooblrMqttError as e:
