@@ -3,6 +3,7 @@ from io import StringIO
 import logging
 import re
 import os.path
+import yaml
 
 
 class DooblrConfigError(Exception):
@@ -25,11 +26,10 @@ class MainConfig(object):
 
     def load(self, filepath):
         with open(filepath, 'r') as config_file:
-            self._parse(unicode(config_file.read()))
+            self._parse(yaml.safe_load(config_file))
 
-    def _parse(self, config_text):
-        fileish_string = StringIO(config_text)
-        self._config.read_file(fileish_string)
+    def _parse(self, config):
+        self._config = config
 
         self.mqtt_host = self._get_with_default("mqtt", "host", default="localhost")
         self.mqtt_port = self._get_with_default("mqtt", "port", default=1883)
@@ -41,12 +41,13 @@ class MainConfig(object):
         self.influx_database = self._get_with_default("influxdb", "database", default="dooblr")
 
         default_config_dir = os.path.join(os.path.expanduser("~"), ".dooblr", "measurements")
-        self.config_dir = self._get_with_default("globaL", "config-dir", default=default_config_dir)
+        self.config_dir = self._get_with_default("global", "config-dir", default=default_config_dir)
 
     def _get_with_default(self, section, option, default):
         try:
-            return self._config.get(section, option)
-        except (NoSectionError, NoOptionError):
+            #return self._config.get(section, option)
+            return self._config[section][option]
+        except KeyError:
             return default
 
 
@@ -58,29 +59,25 @@ class MeasurementConfig(object):
 
     def load(self, filepath):
         with open(filepath, 'r') as config_file:
-            self._parse(unicode(config_file.read()))
+            self._parse(yaml.safe_load(config_file))
 
-    def _parse(self, config_text):
-        fileish_string = StringIO(config_text)
-        self._config.read_file(fileish_string)
+    def _parse(self, config):
+        self._config = config
 
-        for measurement in self._config.sections():
+        for measurement in self._config:
             self.measurements[measurement] = {}
-            if not self._config.has_option(measurement, "fields"):
+
+            if self._config[measurement]["fields"] is None:
                 raise DooblrConfigError("Measurement {m} does not contain required option 'fields'".format(m=measurement))
             else:
-                self.measurements[measurement]["fields"] = self._parse_option(self._config.get(measurement, "fields"))
+                self.measurements[measurement]["fields"] = self._config[measurement]["fields"]
 
-            if not self._config.has_option(measurement, "topics"):
+            if self._config[measurement]["topics"] is None:
                 raise DooblrConfigError("Measurement {m} does not contain required option 'topics'".format(m=measurement))
             else:
-                self.measurements[measurement]["topics"] = self._parse_option(self._config.get(measurement, "topics"))
+                self.measurements[measurement]["topics"] = self._config[measurement]["topics"]
 
-            if not self._config.has_option(measurement, "tags"):
+            if self._config[measurement]["tags"] is None:
                 self._logger.info("Measurement {m} does not contain optional option 'tags'".format(m=measurement))
             else:
-                self.measurements[measurement]["tags"] = self._parse_option(self._config.get(measurement, "tags"))
-
-    @staticmethod
-    def _parse_option(option_string):
-        return re.split(r'[\s,]+', option_string)
+                self.measurements[measurement]["tags"] = self._config[measurement]["tags"]
