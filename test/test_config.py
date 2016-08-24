@@ -15,8 +15,8 @@ class MainConfigParseTestCase(unittest.TestCase):
     def test_partial_section_does_not_raise_error(self):
         config = MainConfig()
         config_text = "\n".join((
-                      u"[mqtt]",
-                      "host: blah"))
+                      u"mqtt:",
+                      "  host: blah"))
         try:
             config._parse(config_text)
         except Exception as e:
