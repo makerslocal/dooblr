@@ -95,12 +95,14 @@ class MeasurementConfig(object):
             self.measurements[measurement] = {}
 
             if "fields" not in self._config[measurement]:
-                raise DooblrConfigError("Measurement {m} does not contain required option 'fields'".format(m=measurement))
+                raise DooblrConfigError("Measurement {m} does not contain required option 'fields'".format(
+                    m=measurement))
             else:
                 self.measurements[measurement]["fields"] = self._listify(self._config[measurement]["fields"])
 
             if "topics" not in self._config[measurement]:
-                raise DooblrConfigError("Measurement {m} does not contain required option 'topics'".format(m=measurement))
+                raise DooblrConfigError("Measurement {m} does not contain required option 'topics'".format(
+                    m=measurement))
             else:
                 self.measurements[measurement]["topics"] = self._listify(self._config[measurement]["topics"])
 
