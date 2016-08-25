@@ -22,7 +22,7 @@ DEFUALT_MAIN_CONFIG = {
 
 
 class DooblrConfigError(Exception):
-    def __init__(self, *args,**kwargs):
+    def __init__(self, *args, **kwargs):
         Exception.__init__(self, *args, **kwargs)
 
 
@@ -66,12 +66,12 @@ class MainConfig(object):
 
     # Made our own dict_merge because dict.update doesn't do sub trees
     def _dict_merge(self, user, default):
-        if isinstance(user,dict) and isinstance(default,dict):
-            for k,v in default.iteritems():
+        if isinstance(user, dict) and isinstance(default, dict):
+            for k, v in default.items():
                 if k not in user:
                     user[k] = v
                 else:
-                    user[k] = self._dict_merge(user[k],v)
+                    user[k] = self._dict_merge(user[k], v)
         return user
 
 
@@ -109,7 +109,8 @@ class MeasurementConfig(object):
             else:
                 self.measurements[measurement]["tags"] = self._listify(self._config[measurement]["tags"])
 
-    def _listify(self, items):
+    @staticmethod
+    def _listify(items):
         item_list = items
         if not isinstance(item_list, list):
             item_list = [items]
