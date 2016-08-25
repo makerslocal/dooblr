@@ -55,11 +55,11 @@ class MeasurementConfigParseTestCase(unittest.TestCase):
         config = MeasurementConfig()
         config_text = "\n".join((
                        u"measurement:",
-                       "  topics:"
+                       "  topics:",
                        "    - ml256/topic/device",
                        "    - ml256/topic/otherdevice",
-                       "  fields:"
-                       "    - coolfield"
+                       "  fields:",
+                       "    - coolfield",
                        "    - neatfield"))
         try:
             config._parse(config_text)
@@ -179,20 +179,3 @@ class MeasurementConfigParseTestCase(unittest.TestCase):
 
         config._parse(config_text)
         self.assertEquals(config.measurements["measurement"]["tags"], ["supertag", "awesometag"])
-
-
-class ParseOptionTestCase(unittest.TestCase):
-    def test_multiple_options_newlines_are_parsed(self):
-        config = MeasurementConfig()
-        option_text = "foo\n        bar"
-        self.assertEquals(config._parse_option(option_text), ["foo", "bar"])
-
-    def test_multiple_options_commas_are_parsed(self):
-        config = MeasurementConfig()
-        option_text = "foo, bar"
-        self.assertEquals(config._parse_option(option_text), ["foo", "bar"])
-
-    def test_multiple_options_commas_and_newlines_are_parsed(self):
-        config = MeasurementConfig()
-        option_text = "foo\n        bar, bah"
-        self.assertEquals(config._parse_option(option_text), ["foo", "bar", "bah"])

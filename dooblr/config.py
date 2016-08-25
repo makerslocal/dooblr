@@ -48,6 +48,11 @@ class MainConfig(object):
 
     def _parse(self, config_text):
         config = yaml.safe_load(config_text)
+
+        if config is None:
+            self._logger.warning("Main config was empty.")
+            return
+
         self._config = self._dict_merge(config, DEFUALT_MAIN_CONFIG)
         print(self._config)
 
@@ -85,6 +90,9 @@ class MeasurementConfig(object):
 
     def _parse(self, config_text):
         self._config = yaml.safe_load(config_text)
+        if self._config is None:
+            self._logger.warning("Measurement config was empty.")
+            return
 
         for measurement in self._config:
             self.measurements[measurement] = {}
