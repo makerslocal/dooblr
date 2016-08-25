@@ -41,7 +41,7 @@ class MainConfig(object):
 
     def load(self, filepath):
         with open(filepath, 'r') as config_file:
-            self._parse(unicode(config_file.read()))
+            self._parse(config_file.read())
 
     def _parse(self, config_text):
         config = yaml.safe_load(config_text)
@@ -83,7 +83,7 @@ class MeasurementConfig(object):
 
     def load(self, filepath):
         with open(filepath, 'r') as config_file:
-            self._parse(unicode(config_file.read()))
+            self._parse(config_file.read())
 
     def _parse(self, config_text):
         self._config = yaml.safe_load(config_text)
