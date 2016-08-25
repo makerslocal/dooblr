@@ -12,4 +12,5 @@ install:
 
 script:
   - nosetests
+  - flake8 dooblr
 
