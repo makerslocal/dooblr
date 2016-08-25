@@ -81,25 +81,25 @@ class MeasurementConfig(object):
 
     def load(self, filepath):
         with open(filepath, 'r') as config_file:
-            self._parse(yaml.safe_load(config_file))
+            self._parse(unicode(config_file.read()))
 
-    def _parse(self, config):
-        self._config = config
+    def _parse(self, config_text):
+        self._config = yaml.safe_load(config_text)
 
         for measurement in self._config:
             self.measurements[measurement] = {}
 
-            if self._config[measurement]["fields"] is None:
+            if "fields" not in self._config[measurement]:
                 raise DooblrConfigError("Measurement {m} does not contain required option 'fields'".format(m=measurement))
             else:
                 self.measurements[measurement]["fields"] = self._listify(self._config[measurement]["fields"])
 
-            if self._config[measurement]["topics"] is None:
+            if "topics" not in self._config[measurement]:
                 raise DooblrConfigError("Measurement {m} does not contain required option 'topics'".format(m=measurement))
             else:
                 self.measurements[measurement]["topics"] = self._listify(self._config[measurement]["topics"])
 
-            if self._config[measurement]["tags"] is None:
+            if "tags" not in self._config[measurement]:
                 self._logger.info("Measurement {m} does not contain optional option 'tags'".format(m=measurement))
             else:
                 self.measurements[measurement]["tags"] = self._listify(self._config[measurement]["tags"])
