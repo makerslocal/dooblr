@@ -1,9 +1,6 @@
 import logging
-import config
-import mqttclient
 import os
-import influxdbclient
-
+from dooblr import config, mqttclient, influxdbclient
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)

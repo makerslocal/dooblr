@@ -1,7 +1,4 @@
-from configparser import ConfigParser, NoOptionError, NoSectionError
-from io import StringIO
 import logging
-import re
 import os.path
 import yaml
 
@@ -81,7 +78,7 @@ class MainConfig(object):
 class MeasurementConfig(object):
     def __init__(self):
         self._logger = logging.getLogger(__name__)
-        self._config = ConfigParser()
+        self._config = None
         self.measurements = {}
 
     def load(self, filepath):
