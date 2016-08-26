@@ -35,8 +35,8 @@ class MqttClient(object):
         self._measurements[name] = {'topics': topics, 'fields': fields, 'tags': tags}
 
     def _on_subscribe(self, client, userdata, mid, granted_qos):
-        self._logger.debug("Registered measurement '{m}' on topics {t}"
-            .format(m=self._mid[mid]["measurement"], t=self._mid[mid]["topic"]))
+        self._logger.debug("Registered measurement '{m}' on topics {t}".format(m=self._mid[mid]["measurement"],
+                                                                               t=self._mid[mid]["topic"]))
 
     def _on_message(self, client, userdata, message):
         self._logger.debug("Received message on topic {t}: {m}".format(t=message.topic, m=message.payload))

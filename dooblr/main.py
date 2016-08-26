@@ -50,7 +50,7 @@ def main():
                                     topics=measurement_cfg.measurements[m]["topics"],
                                     fields=measurement_cfg.measurements[m]["fields"],
                                     tags=measurement_cfg.measurements[m]["tags"])
- 
+
     while True:
         client.loop()
 
