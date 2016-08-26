@@ -13,7 +13,9 @@ class MqttClient(object):
         self._logger = logging.getLogger(__name__)
         self._paho_client = mqtt.Client()
         self._paho_client.on_message = self._on_message
+        self._paho_client.on_subscribe = self._on_subscribe
         self._measurements = {}
+        self._mid = {}
         self._callback = callback
 
     def connect(self, host, port):
@@ -25,11 +27,16 @@ class MqttClient(object):
 
     def register_measurement(self, name, topics, fields, tags):
         for topic in topics:
-            result, _ = self._paho_client.subscribe(topic)
+            print(topic)
+            result, mid = self._paho_client.subscribe(topic)
             if not result == mqtt.MQTT_ERR_SUCCESS:
                 raise DooblrMqttError("Unable to subscribe to topic {t} for '{m}'".format(t=topic, m=name))
+            self._mid[mid] = {'topic': topic, 'measurement': name}
         self._measurements[name] = {'topics': topics, 'fields': fields, 'tags': tags}
-        self._logger.debug("Registered measurement '{m}' on topics {t}".format(m=name, t=topics))
+
+    def _on_subscribe(self, client, userdata, mid, granted_qos):
+        self._logger.debug("Registered measurement '{m}' on topics {t}"
+            .format(m=self._mid[mid]["measurement"], t=self._mid[mid]["topic"]))
 
     def _on_message(self, client, userdata, message):
         self._logger.debug("Received message on topic {t}: {m}".format(t=message.topic, m=message.payload))
