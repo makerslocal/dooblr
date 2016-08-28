@@ -108,6 +108,7 @@ class MeasurementConfig(object):
 
             if "tags" not in self._config[measurement]:
                 self._logger.info("Measurement {m} does not contain optional option 'tags'".format(m=measurement))
+                self.measurements[measurement]["tags"] = []
             else:
                 self.measurements[measurement]["tags"] = self._listify(self._config[measurement]["tags"])
 
