@@ -33,11 +33,12 @@ if __name__ == "__main__":
             'Programming Language :: Python :: 3.5',
         ],
         license='ISC',
-        setup_requires=['vcversioner'],
+        setup_requires=['tcversioner'],
         install_requires=install_requires,
         tests_require=test_requires,
-        vcversioner={
+        tcversioner={
             'version_module_paths': ['dooblr/_version.py'],
+            'use_dev_not_post': True
         },
         packages=['dooblr'],
         entry_points={
