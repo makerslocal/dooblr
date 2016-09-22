@@ -12,8 +12,15 @@ def main():
     default_cfg_path = os.path.join(os.path.expanduser("~"), ".dooblr")
     default_cfg_file = os.path.join(default_cfg_path, "dooblr.yml")
     if not os.path.isdir(default_cfg_path):
+        logger.warning("Config directory not found, creating: {dir}".format(dir=default_cfg_path))
         os.makedirs(default_cfg_path)
-        os.makedirs(os.path.join(default_cfg_path, "measurements"))
+        measurement_cfg_path = os.path.join(default_cfg_path, "measurements")
+        os.makedirs(measurement_cfg_path)
+        config.MeasurementConfig.save_default_config(os.path.join(measurement_cfg_path, "sample.yml"))
+
+    if not os.path.isfile(default_cfg_file):
+        logger.warning(("Main config not found, creating: {config}".format(config=default_cfg_file)))
+        config.MainConfig.save_default_config(default_cfg_file)
 
     try:
         main_cfg.load(default_cfg_file)

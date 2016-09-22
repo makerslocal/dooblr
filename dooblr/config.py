@@ -3,7 +3,7 @@ import os.path
 import yaml
 
 DEFAULT_CONFIG_DIR = os.path.join(os.path.expanduser("~"), ".dooblr", "measurements")
-DEFUALT_MAIN_CONFIG = {
+DEFAULT_MAIN_CONFIG = {
     "global": {
         "config-dir": DEFAULT_CONFIG_DIR,
     },
@@ -50,8 +50,7 @@ class MainConfig(object):
             self._logger.warning("Main config was empty.")
             return
 
-        self._config = self._dict_merge(config, DEFUALT_MAIN_CONFIG)
-        print(self._config)
+        self._config = self._dict_merge(config, DEFAULT_MAIN_CONFIG)
 
         self.mqtt_host = self._config["mqtt"].get("host")
         self.mqtt_port = self._config["mqtt"].get("port")
@@ -73,6 +72,11 @@ class MainConfig(object):
                 else:
                     user[k] = self._dict_merge(user[k], v)
         return user
+
+    @staticmethod
+    def save_default_config(path):
+        with open(path, 'w') as f:
+            yaml.dump(DEFAULT_MAIN_CONFIG, f, default_flow_style=False)
 
 
 class MeasurementConfig(object):
@@ -118,3 +122,14 @@ class MeasurementConfig(object):
         if not isinstance(item_list, list):
             item_list = [items]
         return item_list
+
+    @staticmethod
+    def save_default_config(path):
+        sample_config = {
+            "my_measurement": {
+                "fields": ["important_value"],
+                "topics": ["dooblr/testing/device"],
+                "tags": ["tag1", "tag2"]
+            }}
+        with open(path, 'w') as f:
+            yaml.dump(sample_config, f, default_flow_style=False)

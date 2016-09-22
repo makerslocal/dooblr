@@ -30,7 +30,7 @@ On Windows they're loaded from somewhere like::
 
     C:\Users\<username>\.dooblr\
 
-After the first run of **dooblr**, this directory will be created, but no configuration files will be there.
+After the first run of **dooblr**, this directory will be created, and some default configuration files will be there.
 **dooblr** requires a main ``dooblr.yml`` that defines MQTT and InfluxDB connections, and one or more measurement
 configs.
 
@@ -49,7 +49,7 @@ A default-settings ``dooblr.yml`` config file will look like::
         port: 8086        # Port number of the InfluxDB instance
         username: root    # Username for the InfluxDB instance
         password: root    # Password for the InfluxDB instance
-        database: dooblr  # Database to use in InfluxDB (will be created if it doesn't exist already
+        database: dooblr  # Database to use in InfluxDB (will be created if it doesn't exist already)
 
 By default, **dooblr** looks for ``*.yml`` measurement configs in the ``.dooblr/measurements/`` directory. Measurement
 configs are used to tell **dooblr** which topics and pieces of data need to be pulled from MQTT and pushed to InfluxDB.
