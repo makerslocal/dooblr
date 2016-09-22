@@ -99,22 +99,30 @@ class MeasurementConfig(object):
             self.measurements[measurement] = {}
 
             if "fields" not in self._config[measurement]:
-                raise DooblrConfigError("Measurement {m} does not contain required option 'fields'".format(
+                raise DooblrConfigError("Measurement {m} does not contain required property 'fields'".format(
                     m=measurement))
             else:
                 self.measurements[measurement]["fields"] = self._listify(self._config[measurement]["fields"])
 
             if "topics" not in self._config[measurement]:
-                raise DooblrConfigError("Measurement {m} does not contain required option 'topics'".format(
+                raise DooblrConfigError("Measurement {m} does not contain required property 'topics'".format(
                     m=measurement))
             else:
                 self.measurements[measurement]["topics"] = self._listify(self._config[measurement]["topics"])
 
             if "tags" not in self._config[measurement]:
-                self._logger.info("Measurement {m} does not contain optional option 'tags'".format(m=measurement))
+                self._logger.info("Measurement {m} does not contain optional property 'tags'".format(m=measurement))
                 self.measurements[measurement]["tags"] = []
             else:
                 self.measurements[measurement]["tags"] = self._listify(self._config[measurement]["tags"])
+
+            if "optional_tags" not in self._config[measurement]:
+                self._logger.info("Measurement {m} does not contain optional property 'optional_tags'".format(
+                    m=measurement))
+                self.measurements[measurement]["optional_tags"] = []
+            else:
+                self.measurements[measurement]["optional_tags"] = self._listify(
+                    self._config[measurement]["optional_tags"])
 
     @staticmethod
     def _listify(items):
@@ -129,7 +137,8 @@ class MeasurementConfig(object):
             "my_measurement": {
                 "fields": ["important_value"],
                 "topics": ["dooblr/testing/device"],
-                "tags": ["tag1", "tag2"]
+                "tags": ["tag1", "tag2"],
+                "optional_tags": ["option"]
             }}
         with open(path, 'w') as f:
             yaml.dump(sample_config, f, default_flow_style=False)

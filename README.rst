@@ -58,7 +58,7 @@ configs are used to tell **dooblr** which topics and pieces of data need to be p
 Let's say you have a device that publishes to the ``home/kitchen/fridge/temperature`` and
 ``home/kitchen/freezer/temperature`` topics with the data::
 
-    {"temperature": 40.1, "units":"F", "humidity": 0.12}
+    {"temperature": 40.1, "units":"F", "humidity": 0.12, "label": "blue"}
 
 You would probably want to create a measurement config called ``temperature.yml`` that looks like::
 
@@ -73,9 +73,11 @@ You would probably want to create a measurement config called ``temperature.yml`
         - humidity
         tags:
         - units
+        optional_tags:
+        - label  # Maybe not every message on these topics have a "label" property!
 
 Notice that there can be multiple topics, fields, and tags. Tags and fields refer to the tags and fields used in
-InfluxDB.
+InfluxDB. Optional tags will not raise an error if they weren't defined in the MQTT message, while regular tags will.
 
 .. |Build Status| image:: https://travis-ci.org/makerslocal/dooblr.svg?branch=master
    :target: https://travis-ci.org/makerslocal/dooblr

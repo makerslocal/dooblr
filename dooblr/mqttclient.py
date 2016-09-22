@@ -74,6 +74,12 @@ class MqttClient(object):
             try:
                 parsed_message["tags"][tag] = message[tag]
             except KeyError:
-                raise DooblrMqttError("Message does not contain tag '{field}'".format(field=tag))
+                raise DooblrMqttError("Message does not contain required tag '{tag}'".format(tag=tag))
+
+        for tag in measurement["optional_tags"]:
+            try:
+                parsed_message["tags"][tag] = message[tag]
+            except KeyError:
+                self._logger.info("Message does not contain optional tag '{tag}'".format(tag=tag))
 
         return parsed_message
