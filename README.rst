@@ -8,7 +8,7 @@ dooblr - The Data Doubler
 Utility for duplicating data received over MQTT to InfluxDB.
 
 Installation
-------------
+--------------
 In the very near future, **dooblr** will be able to be installed via pypi/pip. Until then, or if you want the latest,
 bleeding-edge version, you can install it by cloning or downloading the repo and running ``pip install`` inside the
 root directory::
@@ -18,9 +18,17 @@ root directory::
 You should then be able to run **dooblr**::
 
     dooblr
+    
+Docker
+---------
+You will want to mount or copy your configs into the container at the ```/root/.dooblr``` directory.  An example of how Makers Local 256 uses dooblr can be found in the [makerslocal/dooblr-prod](https://github.com/makerslocal/dooblr-prod) repo.
+
+Example:
+
+    docker run -v $(pwd)/config:/root/.dooblr makerslocal/dooblr:latest
 
 Configuration
--------------
+-----------------
 **dooblr** is configured using YAML files, and these files are stored in the user's home directory. On Linux-based
 systems they'll need to be in a directory like::
 
