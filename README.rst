@@ -18,6 +18,16 @@ root directory::
 You should then be able to run **dooblr**::
 
     dooblr
+    
+Docker
+------
+**dooblr** has also been conveniently Dockerized!
+
+You will want to mount or copy your configs into the container at the ```/root/.dooblr``` directory.  An example of how Makers Local 256 uses dooblr can be found in the [makerslocal/dooblr-prod](https://github.com/makerslocal/dooblr-prod) repo.
+
+Example:
+
+    docker run -v $(pwd)/config:/root/.dooblr makerslocal/dooblr:latest
 
 Configuration
 -------------
