@@ -1,5 +1,5 @@
-Unreleased
-----------
+v2.0.0 (release date: 2016-08-20)
+---------------------------------
 
 - `5fd5fd1 <http://github.com/makerslocal/dooblr/commit/5fd5fd17fc790923c8a87fb5cf8f635463613159>`_ - Merge remote-tracking branch 'origin/on_subscribe' into yaml_configs
 - `9bffd03 <http://github.com/makerslocal/dooblr/commit/9bffd036e4f7ed09623f72d6931361f0ce5b06cb>`_ - Merge pull request #19 from makerslocal/yaml_configs
