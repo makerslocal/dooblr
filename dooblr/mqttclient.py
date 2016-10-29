@@ -27,7 +27,6 @@ class MqttClient(object):
 
     def register_measurement(self, name, topics, fields, tags, optional_tags):
         for topic in topics:
-            print(topic)
             result, mid = self._paho_client.subscribe(topic)
             if not result == mqtt.MQTT_ERR_SUCCESS:
                 raise DooblrMqttError("Unable to subscribe to topic {t} for '{m}'".format(t=topic, m=name))
