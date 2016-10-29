@@ -1,12 +1,20 @@
 import logging
 import os
+import argparse
 from dooblr import config, mqttclient, influxdbclient
-
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
 
 
 def main():
+    parser = argparse.ArgumentParser(description='Start up dooblr, the data-doubler.')
+    parser.add_argument('--dry-run', dest='dryrun', action='store_true',
+                        help='do not actually write any data to InfluxDB.')
+
+    args = parser.parse_args()
+    dryrun = args.dryrun
+
+    logging.basicConfig(level=logging.DEBUG)
+    logger = logging.getLogger(__name__)
+
     logger.info("Starting dooblr")
     main_cfg = config.MainConfig()
     default_cfg_path = os.path.join(os.path.expanduser("~"), ".dooblr")
@@ -40,7 +48,8 @@ def main():
         port=main_cfg.influx_port,
         username=main_cfg.influx_username,
         password=main_cfg.influx_password,
-        database=main_cfg.influx_database
+        database=main_cfg.influx_database,
+        dryrun=dryrun
     )
 
     def callback(message):
