@@ -53,14 +53,13 @@ def main():
     )
 
     def callback(message):
-        logger.info(message)
+        logger.debug("Writing measurement to InfluxDB: {msg}".format(msg=message))
         influx.write(message)
 
     client = mqttclient.MqttClient(callback)
     logger.info("Connecting to MQTT broker: {host}:{port}".format(host=main_cfg.mqtt_host, port=main_cfg.mqtt_port))
     client.connect(main_cfg.mqtt_host, port=main_cfg.mqtt_port)
 
-    print(measurement_cfg.measurements)
     for m in measurement_cfg.measurements:
         client.register_measurement(m,
                                     topics=measurement_cfg.measurements[m]["topics"],
