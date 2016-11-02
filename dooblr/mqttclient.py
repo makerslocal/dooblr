@@ -25,14 +25,14 @@ class MqttClient(object):
     def loop(self, timeout=1.0):
         self._paho_client.loop(timeout=timeout)
 
-    def register_measurement(self, name, topics, fields, tags):
+    def register_measurement(self, name, topics, fields, tags, optional_tags):
         for topic in topics:
             print(topic)
             result, mid = self._paho_client.subscribe(topic)
             if not result == mqtt.MQTT_ERR_SUCCESS:
                 raise DooblrMqttError("Unable to subscribe to topic {t} for '{m}'".format(t=topic, m=name))
             self._mid[mid] = {'topic': topic, 'measurement': name}
-        self._measurements[name] = {'topics': topics, 'fields': fields, 'tags': tags}
+        self._measurements[name] = {'topics': topics, 'fields': fields, 'tags': tags, 'optional_tags': optional_tags}
 
     def _on_subscribe(self, client, userdata, mid, granted_qos):
         self._logger.debug("Registered measurement '{m}' on topics {t}".format(m=self._mid[mid]["measurement"],

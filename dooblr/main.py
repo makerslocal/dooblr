@@ -65,7 +65,8 @@ def main():
         client.register_measurement(m,
                                     topics=measurement_cfg.measurements[m]["topics"],
                                     fields=measurement_cfg.measurements[m]["fields"],
-                                    tags=measurement_cfg.measurements[m]["tags"])
+                                    tags=measurement_cfg.measurements[m]["tags"],
+                                    optional_tags=measurement_cfg.measurements[m]["optional_tags"])
 
     while True:
         client.loop()

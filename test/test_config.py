@@ -98,6 +98,18 @@ class MeasurementConfigParseTestCase(unittest.TestCase):
         config._parse(config_text)
         self.assertEquals(config.measurements["measurement"]["optional_tags"], ["optiontag"])
 
+    def test_no_optional_tags_acts_as_empty_list(self):
+        config = MeasurementConfig()
+        config_text = "\n".join((
+            u"measurement:",
+            "  topics:",
+            "    - ml256/topic/device",
+            "  fields: ",
+            "    - coolfield"))
+
+        config._parse(config_text)
+        self.assertEquals(config.measurements["measurement"]["optional_tags"], [])
+
     def test_multiple_optional_tags_are_parsed(self):
         config = MeasurementConfig()
         config_text = "\n".join((
