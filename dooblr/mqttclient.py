@@ -1,7 +1,7 @@
 import logging
 import paho.mqtt.client as mqtt
 import json
-from transformers.influxdbclient import DooblrInfluxDBError
+from dooblr.transformers.influxdbclient import DooblrInfluxDBError
 
 
 class DooblrMqttError(Exception):
