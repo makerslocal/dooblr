@@ -1,7 +1,7 @@
 import logging
 import os
 import argparse
-from dooblr import config, mqttclient, influxdbclient
+from dooblr import config, mqttclient, transformers
 
 
 def main():
@@ -43,7 +43,7 @@ def main():
             logger.info("Loading measurements from {file}".format(file=os.path.join(dirpath, filename)))
             measurement_cfg.load(os.path.join(dirpath, filename))
 
-    influx = influxdbclient.InfluxDBClient(
+    influx = transformers.influxdbclient.InfluxDBClient(
         host=main_cfg.influx_host,
         port=main_cfg.influx_port,
         username=main_cfg.influx_username,
@@ -56,7 +56,7 @@ def main():
         logger.debug("Writing measurement to InfluxDB: {msg}".format(msg=message))
         influx.write(message)
 
-    client = mqttclient.MqttClient(callback)
+    client = mqttclient.MqttClient(callback, influx)
     logger.info("Connecting to MQTT broker: {host}:{port}".format(host=main_cfg.mqtt_host, port=main_cfg.mqtt_port))
     client.connect(main_cfg.mqtt_host, port=main_cfg.mqtt_port)
 
@@ -69,6 +69,7 @@ def main():
 
     while True:
         client.loop()
+
 
 if __name__ == "__main__":
     main()
