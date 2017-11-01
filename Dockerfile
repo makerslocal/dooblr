@@ -7,6 +7,6 @@ COPY . /dooblr
 
 WORKDIR /dooblr
 
-RUN pip install ./ 
+RUN git fetch --unshallow && git fetch --tags && pip install ./ 
 
 ENTRYPOINT ["dooblr"]
