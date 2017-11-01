@@ -1,8 +1,14 @@
+v3.0.0 (release date: 2017-11-01)
+---------------------------------
+
+- `7fcd758 <http://github.com/makerslocal/dooblr/commit/7fcd7586cff04978dd0a5d3a944707c8cdeeca76>` - Refactor dooblr to be more pluggable. This will require slight config changes.
+
 v2.1.0 (release date: 2016-11-01)
 ---------------------------------
-[32f1709](http://github.com/makerslocal/dooblr/commit/32f1709812e7e32d12a544333b4eb23e7dc90c3f) - Merge pull request #32 from makerslocal/add-dryrun
-[04cf381](http://github.com/makerslocal/dooblr/commit/04cf3812b19ea9b0e73a8a5fa4f227d21688ec98) - Merge pull request #33 from makerslocal/fix-opt-tags
-[fa0fb00](http://github.com/makerslocal/dooblr/commit/fa0fb003e8fd8da4fb3fcb8c837d3618198a71c3) - Merge pull request #34 from makerslocal/remove-print
+
+- `32f1709 <http://github.com/makerslocal/dooblr/commit/32f1709812e7e32d12a544333b4eb23e7dc90c3f>` - Merge pull request #32 from makerslocal/add-dryrun
+- `04cf381 <http://github.com/makerslocal/dooblr/commit/04cf3812b19ea9b0e73a8a5fa4f227d21688ec98>` - Merge pull request #33 from makerslocal/fix-opt-tags
+- `fa0fb00 <http://github.com/makerslocal/dooblr/commit/fa0fb003e8fd8da4fb3fcb8c837d3618198a71c3>` - Merge pull request #34 from makerslocal/remove-print
 
 v2.0.0 (release date: 2016-08-20)
 ---------------------------------
