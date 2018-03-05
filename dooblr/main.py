@@ -60,12 +60,9 @@ def main():
     logger.info("Connecting to MQTT broker: {host}:{port}".format(host=main_cfg.mqtt_host, port=main_cfg.mqtt_port))
     client.connect(main_cfg.mqtt_host, port=main_cfg.mqtt_port)
 
-    for m in measurement_cfg.measurements:
-        client.register_measurement(m,
-                                    topics=measurement_cfg.measurements[m]["topics"],
-                                    fields=measurement_cfg.measurements[m]["fields"],
-                                    tags=measurement_cfg.measurements[m]["tags"],
-                                    optional_tags=measurement_cfg.measurements[m]["optional_tags"])
+    for measurement_name in measurement_cfg.measurements:
+        logger.error(measurement_name)
+        client.register_measurement(measurement_name, measurement_cfg.measurements[measurement_name])
 
     while True:
         client.loop()
