@@ -1,6 +1,10 @@
+v3.1.0 (release date: 2018-03-05)
+---------------------------------
+- `c9d40bd <http://github.com/makerslocal/dooblr/commit/c9d40bdec00036befc5ffa84eaa50d2443cbe970>`_ - Add single-value parser
+- `c9d40bd <http://github.com/makerslocal/dooblr/commit/c9d40bdec00036befc5ffa84eaa50d2443cbe970>`_ - Fix single-value JSON crash
+
 v3.0.0 (release date: 2017-11-01)
 ---------------------------------
-
 - `7fcd758 <http://github.com/makerslocal/dooblr/commit/7fcd7586cff04978dd0a5d3a944707c8cdeeca76>`_ - Refactor dooblr to be more pluggable. This will require slight config changes.
 
 v2.1.0 (release date: 2016-11-01)
