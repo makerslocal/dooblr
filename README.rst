@@ -68,7 +68,7 @@ configs are used to tell **dooblr** which topics and pieces of data need to be p
 Single Value MQTT Message
 +++++++++++++++++++++++++
 If you have a device that publishes to the ``home/garage/humidity`` topic with single float values like ``12.3``,
-you would want to create a measurement like ``humidity.yml``:
+you would want to create a measurement like ``humidity.yml``::
 
     # humidity.yml
     humidity:
