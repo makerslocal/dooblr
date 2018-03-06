@@ -63,8 +63,24 @@ A default-settings ``dooblr.yml`` config file will look like::
 
 By default, **dooblr** looks for ``*.yml`` measurement configs in the ``.dooblr/measurements/`` directory. Measurement
 configs are used to tell **dooblr** which topics and pieces of data need to be pulled from MQTT and pushed to InfluxDB.
-**dooblr** expects the MQTT message to contain simple JSON data in its payload.
+**dooblr** expects the MQTT message to contain either a single value or simple JSON data in its payload.
 
+Single Value MQTT Message
++++++++++++++++++++++++++
+If you have a device that publishes to the ``home/garage/humidity`` topic with single float values like ``12.3``,
+you would want to create a measurement like ``humidity.yml``:
+
+    # humidity.yml
+    humidity:
+        parser: single-value
+        value_type: float     # Valid value_types are integer, float, boolean, and string
+        field_name: humidity  # If no field_name is provided, the default is 'value'
+        topics:
+        - home/garage/humidity
+        
+
+Simple JSON MQTT Message
+++++++++++++++++++++++++
 Let's say you have a device that publishes to the ``home/kitchen/fridge/temperature`` and
 ``home/kitchen/freezer/temperature`` topics with the data::
 

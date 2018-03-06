@@ -98,31 +98,63 @@ class MeasurementConfig(object):
         for measurement in self._config:
             self.measurements[measurement] = {}
 
-            if "fields" not in self._config[measurement]:
-                raise DooblrConfigError("Measurement {m} does not contain required property 'fields'".format(
-                    m=measurement))
-            else:
-                self.measurements[measurement]["fields"] = self._listify(self._config[measurement]["fields"])
+            parser = self._config[measurement].get("parser", "json")
+            self.measurements[measurement]["parser"] = parser
 
-            if "topics" not in self._config[measurement]:
-                raise DooblrConfigError("Measurement {m} does not contain required property 'topics'".format(
-                    m=measurement))
-            else:
-                self.measurements[measurement]["topics"] = self._listify(self._config[measurement]["topics"])
+            if parser == "single-value":
+                if "value_type" not in self._config[measurement]:
+                    raise DooblrConfigError("Measurement {m} does not contain required property 'value_type'".format(
+                        m=measurement))
+                else:
+                    if self._config[measurement]["value_type"] not in ["integer", "boolean", "string", "float"]:
+                        raise DooblrConfigError("Value type '{t}' is not a valid value type, in measurement {m}".format(
+                            t=self._config[measurement]["value_type"],
+                            m=measurement))
+                    else:
+                        self.measurements[measurement]["value_type"] = self._config[measurement]["value_type"]
 
-            if "tags" not in self._config[measurement]:
-                self._logger.info("Measurement {m} does not contain optional property 'tags'".format(m=measurement))
-                self.measurements[measurement]["tags"] = []
-            else:
-                self.measurements[measurement]["tags"] = self._listify(self._config[measurement]["tags"])
+                if "topics" not in self._config[measurement]:
+                    raise DooblrConfigError("Measurement {m} does not contain required property 'topics'".format(
+                        m=measurement))
+                else:
+                    self.measurements[measurement]["topics"] = self._listify(self._config[measurement]["topics"])
 
-            if "optional_tags" not in self._config[measurement]:
-                self._logger.info("Measurement {m} does not contain optional property 'optional_tags'".format(
-                    m=measurement))
-                self.measurements[measurement]["optional_tags"] = []
+                if "field_name" not in self._config[measurement]:
+                    self._logger.info("Using default field name 'value' for measurement {m}".format(m=measurement))
+                    self.measurements[measurement]["field_name"] = 'value'
+                else:
+                    self.measurements[measurement]["field_name"] = self._config[measurement]["field_name"]
+
+            elif parser == "json":
+                if "fields" not in self._config[measurement]:
+                    raise DooblrConfigError("Measurement {m} does not contain required property 'fields'".format(
+                        m=measurement))
+                else:
+                    self.measurements[measurement]["fields"] = self._listify(self._config[measurement]["fields"])
+
+                if "topics" not in self._config[measurement]:
+                    raise DooblrConfigError("Measurement {m} does not contain required property 'topics'".format(
+                        m=measurement))
+                else:
+                    self.measurements[measurement]["topics"] = self._listify(self._config[measurement]["topics"])
+
+                if "tags" not in self._config[measurement]:
+                    self._logger.info("Measurement {m} does not contain optional property 'tags'".format(m=measurement))
+                    self.measurements[measurement]["tags"] = []
+                else:
+                    self.measurements[measurement]["tags"] = self._listify(self._config[measurement]["tags"])
+
+                if "optional_tags" not in self._config[measurement]:
+                    self._logger.info("Measurement {m} does not contain optional property 'optional_tags'".format(
+                        m=measurement))
+                    self.measurements[measurement]["optional_tags"] = []
+                else:
+                    self.measurements[measurement]["optional_tags"] = self._listify(
+                        self._config[measurement]["optional_tags"])
+
             else:
-                self.measurements[measurement]["optional_tags"] = self._listify(
-                    self._config[measurement]["optional_tags"])
+                raise DooblrConfigError("'{p}' is not a valid parser, in measurement {m}".format(
+                    p=parser, m=measurement))
 
     @staticmethod
     def _listify(items):

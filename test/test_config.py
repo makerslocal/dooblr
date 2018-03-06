@@ -22,8 +22,17 @@ class MainConfigParseTestCase(unittest.TestCase):
         except Exception as e:
             self.fail("Missing config option raised an exception! ({e})".format(e=e))
 
+class MeasurementConfigTestCase(unittest.TestCase):
+    def test_invalid_parser_raises_error(self):
+        config = MeasurementConfig()
+        config_text = "\n".join((
+            u"measurement:",
+            "  parser: bad-parser"))
+        with self.assertRaises(DooblrConfigError):
+            config._parse(config_text)
 
-class MeasurementConfigParseTestCase(unittest.TestCase):
+
+class MeasurementConfigParseJsonTestCase(unittest.TestCase):
 
     def test_missing_field_value_raises_error(self):
         config = MeasurementConfig()
@@ -220,3 +229,138 @@ class MeasurementConfigParseTestCase(unittest.TestCase):
 
         config._parse(config_text)
         self.assertEquals(config.measurements["measurement"]["tags"], ["supertag", "awesometag"])
+
+    def test_explicit_json_parser(self):
+        config = MeasurementConfig()
+        config_text = "\n".join((
+            u"measurement:",
+            "  parser: json",
+            "  topics:",
+            "    - ml256/topic/device",
+            "    - ml256/topic/otherdevice",
+            "  fields: ",
+            "    - coolfield",
+            "    - neatfield",
+            "  tags: ",
+            "    - supertag",
+            "    - awesometag"))
+        try:
+            config._parse(config_text)
+        except DooblrConfigError as e:
+            self.fail("Valid config raised an exception! ({e})".format(e=e))
+
+class MeasurementConfigParseSingleValueTestCase(unittest.TestCase):
+
+    def test_singlevalue_parser_default_field(self):
+        config = MeasurementConfig()
+        config_text = "\n".join((
+            u"measurement:",
+            "  parser: single-value",
+            "  value_type: integer",
+            "  topics:",
+            "    - ml256/topic/device",
+            "    - ml256/topic/otherdevice"))
+
+        config._parse(config_text)
+        self.assertEquals(config.measurements["measurement"]["field_name"], "value")
+
+    def test_singlevalue_parser_custom_field(self):
+        config = MeasurementConfig()
+        config_text = "\n".join((
+            u"measurement:",
+            "  parser: single-value",
+            "  value_type: integer",
+            "  field_name: foo",
+            "  topics:",
+            "    - ml256/topic/device",
+            "    - ml256/topic/otherdevice"))
+
+        config._parse(config_text)
+        self.assertEquals(config.measurements["measurement"]["field_name"], "foo")
+
+    def test_singlevalue_parser_without_valuetype_raises_error(self):
+        config = MeasurementConfig()
+        config_text = "\n".join((
+            u"measurement:",
+            "  parser: single-value",
+            "  topics:",
+            "    - ml256/topic/device",
+            "    - ml256/topic/otherdevice"))
+
+        with self.assertRaises(DooblrConfigError):
+            config._parse(config_text)
+
+    def test_singlevalue_parser_with_bad_valuetype_raises_error(self):
+        config = MeasurementConfig()
+        config_text = "\n".join((
+            u"measurement:",
+            "  parser: single-value",
+            "  value_type: nonsense",
+            "  topics:",
+            "    - ml256/topic/device",
+            "    - ml256/topic/otherdevice"))
+
+        with self.assertRaises(DooblrConfigError):
+            config._parse(config_text)
+
+    def test_singlevalue_parser_integer_type(self):
+        config = MeasurementConfig()
+        config_text = "\n".join((
+            u"measurement:",
+            "  parser: single-value",
+            "  value_type: integer",
+            "  topics:",
+            "    - ml256/topic/device",
+            "    - ml256/topic/otherdevice"))
+
+        config._parse(config_text)
+        self.assertEquals(config.measurements["measurement"]["value_type"], "integer")
+
+    def test_singlevalue_parser_float_type(self):
+        config = MeasurementConfig()
+        config_text = "\n".join((
+            u"measurement:",
+            "  parser: single-value",
+            "  value_type: float",
+            "  topics:",
+            "    - ml256/topic/device",
+            "    - ml256/topic/otherdevice"))
+
+        config._parse(config_text)
+        self.assertEquals(config.measurements["measurement"]["value_type"], "float")
+
+    def test_singlevalue_parser_string_type(self):
+        config = MeasurementConfig()
+        config_text = "\n".join((
+            u"measurement:",
+            "  parser: single-value",
+            "  value_type: string",
+            "  topics:",
+            "    - ml256/topic/device",
+            "    - ml256/topic/otherdevice"))
+
+        config._parse(config_text)
+        self.assertEquals(config.measurements["measurement"]["value_type"], "string")
+
+    def test_singlevalue_parser_boolean_type(self):
+        config = MeasurementConfig()
+        config_text = "\n".join((
+            u"measurement:",
+            "  parser: single-value",
+            "  value_type: boolean",
+            "  topics:",
+            "    - ml256/topic/device",
+            "    - ml256/topic/otherdevice"))
+
+        config._parse(config_text)
+        self.assertEquals(config.measurements["measurement"]["value_type"], "boolean")
+
+    def test_missing_topic_value_raises_error(self):
+        config = MeasurementConfig()
+        config_text = "\n".join((
+            u"measurement:",
+            "  parser: single-value",
+            "  value_type: boolean"))
+
+        with self.assertRaises(DooblrConfigError):
+            config._parse(config_text)

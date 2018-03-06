@@ -3,6 +3,7 @@ import influxdb
 from influxdb.exceptions import InfluxDBClientError
 from schema import Schema, And, Or, Optional, SchemaError
 import six
+import json
 
 LOGGER = logging.getLogger(__name__)
 
@@ -47,6 +48,21 @@ class InfluxDBClient(object):
 
     @staticmethod
     def _parse_message(measurement, message):
+        if measurement["parser"] == "json":
+            return InfluxDBClient._parse_json_message(measurement, message)
+        elif measurement["parser"] == "single-value":
+            return InfluxDBClient._parse_singlevalue_message(measurement, message)
+
+    @staticmethod
+    def _parse_json_message(measurement, message):
+        try:
+            message = json.loads(message)
+        except ValueError:
+            raise DooblrInfluxDBError("unable to decode json")
+
+        if not isinstance(message, dict):
+            raise DooblrInfluxDBError("message is not a json object")
+
         parsed_message = {"measurement": measurement["name"],
                           "fields": {},
                           "tags": {}}
@@ -68,5 +84,33 @@ class InfluxDBClient(object):
                 parsed_message["tags"][tag] = message[tag]
             except KeyError:
                 LOGGER.info("Message does not contain optional tag '{tag}'".format(tag=tag))
+
+        return parsed_message
+
+    @staticmethod
+    def _parse_singlevalue_message(measurement, message):
+        parsed_message = {"measurement": measurement["name"],
+                          "fields": {},
+                          "tags": {}}
+
+        if measurement["value_type"] == "integer":
+            try:
+                parsed_message["fields"][measurement["field_name"]] = int(message)
+            except ValueError:
+                raise DooblrInfluxDBError("Message {m} is not a valid integer".format(m=message))
+        elif measurement["value_type"] == "float":
+            try:
+                parsed_message["fields"][measurement["field_name"]] = float(message)
+            except ValueError:
+                raise DooblrInfluxDBError("Message {m} is not a valid integer".format(m=message))
+        elif measurement["value_type"] == "string":
+            parsed_message["fields"][measurement["field_name"]] = message
+        elif measurement["value_type"] == "boolean":
+            if message.lower() in ['t', 'true', 'y', 'yes', 'on']:
+                parsed_message["fields"][measurement["field_name"]] = True
+            elif message.lower() in ['f', 'false', 'n', 'no', 'off']:
+                parsed_message["fields"][measurement["field_name"]] = False
+            else:
+                raise DooblrInfluxDBError("Message {m} is not a valid boolean".format(m=message))
 
         return parsed_message
